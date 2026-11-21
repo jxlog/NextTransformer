@@ -1,0 +1,10 @@
+{
+  "name": "canon_abcd",
+  "family": "others",
+  "title": "Dense with Canon layers A-D",
+  "paper": {
+    "title": "Physics of Language Models: Part 4.1, Architecture Design and the Magic of Canon Layers",
+    "url": "https://arxiv.org/abs/2512.17351"
+  },
+  "shell": {"layers": 23, "mlp_width": 6144, "window_pattern": "L"}
+}
