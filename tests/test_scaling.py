@@ -40,9 +40,11 @@ def test_dense_200b_plan(capsys):
 
 
 @pytest.mark.parametrize('cell_id, name, parameters, expected', [
-    ('dense-T3-L20', 't3_dense_l20', 477_102_146, (29433, 32, [20000, 29433])),
-    # Shorter than core_every, so L28 evaluates CORE only at its endpoint.
-    ('dense-T3-L28', 't3_dense_l28', 1_196_425_298, (11833, 32, [11833])),
+    ('dense-T3-L16', 't3_dense_l16', 268_435_514, (52633, 32, [20000, 40000, 52633], 54)),
+    ('dense-T3-L20', 't3_dense_l20', 477_102_146, (29433, 32, [20000, 29433], 31)),
+    # Shorter than core_every, so L28 and L32 evaluate CORE only at their endpoints.
+    ('dense-T3-L28', 't3_dense_l28', 1_196_425_298, (11833, 32, [11833], 13)),
+    ('dense-T3-L32', 't3_dense_l32', 1_744_830_554, (8167, 32, [8167], 10)),
 ])
 def test_t3_dense_cells_match_their_manifest_cell(capsys, cell_id, name, parameters, expected):
     cell = next(c for c in json.loads((ROOT/'configs/scaling/t3.json').read_text())['cells']
@@ -52,8 +54,6 @@ def test_t3_dense_cells_match_their_manifest_cell(capsys, cell_id, name, paramet
                                                                    cell['heads'], cell['ffnWidth'])
     assert (tc.steps, tc.total_tokens) == (cell['estimatedUpdates'], cell['estimatedTokens'])
     assert mc.width//mc.heads == cell['headDim'] and mc.window_pattern == 'L' and not mc.value_embeddings
-    published = json.loads((ROOT/f'results/scaling/runs/{cell_id}.json').read_text())
-    assert config_hash(mc, tc) == published['configSha256']
     with torch.device('meta'): model = NativeExperiment(mc)
     assert sum(p.numel() for p in model.parameters()) == parameters
     d, layers, t = mc.width, mc.dense_layers, mc.sequence_len
@@ -61,7 +61,14 @@ def test_t3_dense_cells_match_their_manifest_cell(capsys, cell_id, name, paramet
     assert abs(theoretical_training_flops(mc)*tc.total_tokens-1e20) < .01e20
     train.main(['--config', str(ROOT/f'configs/scaling/{name}.json'), '--dry-run', '--world-size', '8'])
     plan = json.loads(capsys.readouterr().out)
-    assert (plan['steps'], plan['accumulation'], plan['core_steps']) == expected
+    assert (plan['steps'], plan['accumulation'], plan['core_steps'], plan['validation_events']) == expected
+
+
+@pytest.mark.parametrize('layers', [20, 28])
+def test_published_t3_dense_configuration_hashes(layers):
+    mc, tc = load_config(ROOT/f'configs/scaling/t3_dense_l{layers}.json')
+    published = json.loads((ROOT/f'results/scaling/runs/dense-T3-L{layers}.json').read_text())
+    assert config_hash(mc, tc) == published['configSha256']
 
 
 def test_value_embeddings_switch_removes_the_tables_gates_and_their_cost():
