@@ -40,9 +40,11 @@ def test_dense_200b_plan(capsys):
 
 
 @pytest.mark.parametrize('cell_id, name, parameters, expected', [
+    ('dense-T3-L16', 't3_dense_l16', 268_435_514, (52633, 32, [20000, 40000, 52633])),
     ('dense-T3-L20', 't3_dense_l20', 477_102_146, (29433, 32, [20000, 29433])),
-    # Shorter than core_every, so L28 evaluates CORE only at its endpoint.
+    # Shorter than core_every, so L28 and L32 evaluate CORE only at their endpoints.
     ('dense-T3-L28', 't3_dense_l28', 1_196_425_298, (11833, 32, [11833])),
+    ('dense-T3-L32', 't3_dense_l32', 1_744_830_554, (8167, 32, [8167])),
 ])
 def test_t3_dense_cells_match_their_manifest_cell(capsys, cell_id, name, parameters, expected):
     cell = next(c for c in json.loads((ROOT/'configs/scaling/t3.json').read_text())['cells']

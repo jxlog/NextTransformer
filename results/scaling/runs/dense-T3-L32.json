@@ -1,0 +1,124 @@
+{
+ "id": "dense-T3-L32",
+ "name": "Dense · T3-L32 · 2K",
+ "family": "dense",
+ "protocol": "nextt-scale-2k-v1",
+ "config": "configs/scaling/t3_dense_l32.json",
+ "configSha256": "3a8360dc1b0dba527608b43fde7026e5121a44ad8ee959800a84b6bbcbfbb214",
+ "model": {
+  "layers": 32,
+  "width": 2048,
+  "heads": 16,
+  "mlpWidth": 8192,
+  "sequenceLength": 2048,
+  "vocabSize": 32768
+ },
+ "parameters": {
+  "total": 1744830554,
+  "blocks": 1610612736,
+  "blocksAndHead": 1677721600
+ },
+ "training": {
+  "steps": 8167,
+  "inputTokens": 8563720192,
+  "globalBatchTokens": 1048576,
+  "worldSize": 8,
+  "microBatch": 1,
+  "gradientAccumulation": 64,
+  "theoreticalGflopsPerToken": 11.67694248,
+  "trainingFlopsEstimate": 9.999806809679856e+19,
+  "gpuHours": 131.26951033395818,
+  "medianMfu": 0.21742568244498103
+ },
+ "source": {
+  "sha256": "e38c8d8313e23dbadf8183d314cbfef35d033dabbfb03a621c9f6e6a780ea004",
+  "nativeManifestSha256": "7f37aebc75cf8b451fd9c9a1b19d71a6012f7f94678bf5dfbcb23aa12f6c5474",
+  "dataSha256": "c694fefb96ebc78590c5b8d477ed8b8c64c5bbab56941e4eb4cc8ea24c24693a",
+  "torch": "2.9.1+cu128",
+  "cuda": "12.8",
+  "attention": "sdpa"
+ },
+ "val": [
+  {
+   "step": 0,
+   "value": 3.168920539372155
+  },
+  {
+   "step": 1000,
+   "value": 0.8243320609922564
+  },
+  {
+   "step": 2000,
+   "value": 0.7838366994020198
+  },
+  {
+   "step": 3000,
+   "value": 0.7643154670709743
+  },
+  {
+   "step": 4000,
+   "value": 0.7394015940681679
+  },
+  {
+   "step": 5000,
+   "value": 0.7211196812451243
+  },
+  {
+   "step": 6000,
+   "value": 0.7065996182992587
+  },
+  {
+   "step": 7000,
+   "value": 0.6948191558233364
+  },
+  {
+   "step": 8000,
+   "value": 0.6866847026505702
+  },
+  {
+   "step": 8167,
+   "value": 0.685827715248184
+  }
+ ],
+ "core": [
+  {
+   "step": 8167,
+   "value": 0.30362426844702173
+  }
+ ],
+ "finalBpb": {
+  "val": 0.6831851768108193,
+  "train": 0.6850957393933828
+ },
+ "finalCore": {
+  "value": 0.30362426844702173,
+  "tasks": {
+   "hellaswag_zeroshot": 0.4799176851908366,
+   "jeopardy": 0.14501653611660004,
+   "bigbench_qa_wikidata": 0.5175926089286804,
+   "arc_easy": 0.6212120850880941,
+   "arc_challenge": 0.2241183121999105,
+   "copa": 0.3399999141693115,
+   "commonsense_qa": 0.21785421669483182,
+   "piqa": 0.5233949422836304,
+   "openbook_qa": 0.22400001684824625,
+   "lambada_openai": 0.4830195903778076,
+   "hellaswag": 0.49306241671244305,
+   "winograd": 0.4212454557418823,
+   "winogrande": 0.18863451480865479,
+   "bigbench_dyck_languages": 0.09000000357627869,
+   "agi_eval_lsat_ar": 0.027173891663551317,
+   "bigbench_cs_algorithms": 0.4151515066623688,
+   "bigbench_operators": 0.190476194024086,
+   "bigbench_repeat_copy_logic": 0.0,
+   "squad": 0.4947965741157532,
+   "coqa": 0.3512463867664337,
+   "boolq": 0.05118299157995928,
+   "bigbench_language_identification": 0.18063806228511797
+  }
+ },
+ "links": {
+  "wandb": null,
+  "checkpoint": "https://huggingface.co/jxlog/nextt-scaling-dense-t3-l32-2k"
+ }
+}
